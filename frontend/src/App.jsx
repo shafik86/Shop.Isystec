@@ -15,6 +15,7 @@ import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 import OrderHistory from './pages/OrderHistory';
 import Account from './pages/Account';
+import StripePay from './pages/StripePay';
 
 // Admin pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -61,6 +62,7 @@ export default function App() {
           <Route path="/order-success" element={<StoreLayout><ProtectedRoute><OrderSuccess /></ProtectedRoute></StoreLayout>} />
           <Route path="/orders" element={<StoreLayout><ProtectedRoute><OrderHistory /></ProtectedRoute></StoreLayout>} />
           <Route path="/account" element={<StoreLayout><ProtectedRoute><Account /></ProtectedRoute></StoreLayout>} />
+          <Route path="/stripe-pay" element={<StoreLayout><ProtectedRoute><StripePay /></ProtectedRoute></StoreLayout>} />
 
           {/* Admin */}
           <Route path="/admin" element={<AdminPage><AdminDashboard /></AdminPage>} />

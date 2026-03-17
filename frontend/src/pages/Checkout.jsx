@@ -57,11 +57,26 @@ export default function Checkout() {
     if (!paymentMethod) return;
     setSubmitting(true);
     try {
-      const res = await api.post('/orders', {
+      const orderRes = await api.post('/orders', {
         payment_method: paymentMethod,
         voucher_code: voucherInfo ? voucherCode : undefined
       });
-      navigate('/order-success', { state: { order: res.data.order } });
+      const order = orderRes.data.order;
+
+      if (paymentMethod === 'stripe') {
+        // Get Stripe PaymentIntent and route to payment form
+        const intentRes = await api.post('/payment/stripe/create-intent', { order_id: order.id });
+        navigate('/stripe-pay', {
+          state: {
+            orderId: order.id,
+            clientSecret: intentRes.data.clientSecret,
+            publishableKey: intentRes.data.publishable_key,
+          }
+        });
+      } else {
+        // Other gateways (billplz, senangpay) — go straight to success for now
+        navigate('/order-success', { state: { order } });
+      }
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to place order');
     } finally {

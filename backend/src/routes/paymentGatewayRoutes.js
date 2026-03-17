@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getMethods, getAllGateways, toggleGateway, getGatewayConfig, saveGatewayConfig, deleteGatewayConfigKey } = require('../controllers/paymentGatewayController');
+const { createPaymentIntent, confirmPayment } = require('../controllers/stripeController');
 const { verifyToken, isAdmin } = require('../middleware/auth');
 
 /**
@@ -161,5 +162,9 @@ router.put('/admin/:name/config', verifyToken, isAdmin, saveGatewayConfig);
  *         description: Config key deleted
  */
 router.delete('/admin/:name/config/:key', verifyToken, isAdmin, deleteGatewayConfigKey);
+
+// Stripe payment flow (authenticated customer)
+router.post('/stripe/create-intent', verifyToken, createPaymentIntent);
+router.post('/stripe/confirm', verifyToken, confirmPayment);
 
 module.exports = router;
